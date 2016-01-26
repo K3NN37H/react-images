@@ -179,6 +179,11 @@ class Lightbox extends Component {
 
 		return (
 			<figure key={'image' + currentImage} className={classes.figure} style={{ maxWidth: this.props.width }}>
+				{images[currentImage].isVideo ? (
+					<video src={images[currentImage].src} controls="controls"
+						style={{paddingTop: '40px', paddingBottom: '50px', maxHeight: windowHeight,
+						maxWidth: this.props.width}}></video>
+				) :
 				<img
 					className={classes.image}
 					onClick={this.handleImageClick}
@@ -191,6 +196,7 @@ class Lightbox extends Component {
 						maxHeight: windowHeight
 					}}
 				/>
+				}
 				{this.renderFooter(images[currentImage].caption)}
 			</figure>
 		);

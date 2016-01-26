@@ -10,7 +10,7 @@ function capitalizeFirstLetter(str) {
 }
 
 const IMAGE_NAMES = ['cat', 'cats', 'chameleon', 'dog', 'ducks', 'goat', 'ostrich', 'pigeon', 'pigs', 'seagulls', 'wasp', 'yawn'];
-const IMAGES = IMAGE_NAMES.map(img => {
+let IMAGES = IMAGE_NAMES.map(img => {
 	return {
 		src: `./images/800-${img}.jpg`,
 		thumbnail: `./images/thumbnail-${img}.jpg`,
@@ -23,6 +23,7 @@ const IMAGES = IMAGE_NAMES.map(img => {
 		caption: capitalizeFirstLetter(img)
 	};
 });
+IMAGES.push( { src: 'https://ia801001.us.archive.org/30/items/ChineseLanternCCBYNatureClip/Chinese%20lantern%20CC-BY%20NatureClip.mp4', isVideo: true } )
 
 render (
 	<div>
