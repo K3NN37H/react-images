@@ -6,7 +6,7 @@ const GAP_TOP = 40;
 const styles = {
 	// SCENE
 	container: {
-		backgroundColor: 'rgba(0,0,0,0.8)',
+		backgroundColor: 'rgba(0,0,0,0.5)',
 		boxSizing: 'border-box',
 		height: '100%',
 		left: 0,
