@@ -690,6 +690,7 @@ var Lightbox = (function (_Component) {
 				'figure',
 				{ key: 'image' + currentImage, className: classes.figure, style: { maxWidth: this.props.width } },
 				images[currentImage].isVideo ? _react2['default'].createElement('video', { src: images[currentImage].src, controls: 'controls',
+					poster: images[currentImage].poster,
 					style: { paddingTop: '40px', paddingBottom: '50px', maxHeight: windowHeight,
 						maxWidth: this.props.width } }) : _react2['default'].createElement('img', {
 					className: classes.image,

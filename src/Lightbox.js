@@ -181,6 +181,7 @@ class Lightbox extends Component {
 			<figure key={'image' + currentImage} className={classes.figure} style={{ maxWidth: this.props.width }}>
 				{images[currentImage].isVideo ? (
 					<video src={images[currentImage].src} controls="controls"
+						poster={images[currentImage].poster}
 						style={{paddingTop: '40px', paddingBottom: '50px', maxHeight: windowHeight,
 						maxWidth: this.props.width}}></video>
 				) :

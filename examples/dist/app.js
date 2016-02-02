@@ -33,6 +33,7 @@ var IMAGES = IMAGE_NAMES.map(function (img) {
 	};
 });
 IMAGES.push({ src: 'https://ia801001.us.archive.org/30/items/ChineseLanternCCBYNatureClip/Chinese%20lantern%20CC-BY%20NatureClip.mp4', isVideo: true });
+IMAGES.push({ src: 'https://ia800504.us.archive.org/32/items/electricsheep-flock-244-32500-2/00244=32592=22973=22551.mp4', isVideo: true, poster: './images/800-yawn.jpg' });
 
 (0, _reactDom.render)(_react2['default'].createElement(
 	'div',
