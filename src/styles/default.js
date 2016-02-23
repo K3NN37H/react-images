@@ -1,6 +1,6 @@
 const CLOSE_SIZE = 20;
 const ARROW_HEIGHT = 120;
-const GAP_BOTTOM = 50;
+const GAP_BOTTOM = 100;
 const GAP_TOP = 40;
 
 const styles = {
@@ -38,7 +38,7 @@ const styles = {
 		lineHeight: 0,
 		maxWidth: '100%',
 		margin: '0 auto',
-		paddingBottom: 50,
+		paddingBottom: GAP_BOTTOM,
 		paddingTop: 40,
 		height: 'auto',
 		width: 'auto',

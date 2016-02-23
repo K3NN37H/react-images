@@ -264,7 +264,7 @@ Object.defineProperty(exports, '__esModule', {
 });
 var CLOSE_SIZE = 20;
 var ARROW_HEIGHT = 120;
-var GAP_BOTTOM = 50;
+var GAP_BOTTOM = 100;
 var GAP_TOP = 40;
 
 var styles = {
@@ -302,7 +302,7 @@ var styles = {
 		lineHeight: 0,
 		maxWidth: '100%',
 		margin: '0 auto',
-		paddingBottom: 50,
+		paddingBottom: GAP_BOTTOM,
 		paddingTop: 40,
 		height: 'auto',
 		width: 'auto',
