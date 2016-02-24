@@ -294,7 +294,10 @@ var styles = {
 		lineHeight: 0,
 		verticalAlign: 'middle'
 	},
-
+	video: {
+		paddingTop: 40,
+		paddingBottom: GAP_BOTTOM
+	},
 	// IMAGES
 	image: {
 		boxSizing: 'border-box',
@@ -691,7 +694,8 @@ var Lightbox = (function (_Component) {
 				{ key: 'image' + currentImage, className: classes.figure, style: { maxWidth: this.props.width } },
 				images[currentImage].isVideo ? _react2['default'].createElement('video', { src: images[currentImage].src, controls: 'controls',
 					poster: images[currentImage].poster,
-					style: { paddingTop: '40px', paddingBottom: '50px', maxHeight: windowHeight,
+					className: classes.video,
+					style: { maxHeight: windowHeight,
 						maxWidth: this.props.width } }) : _react2['default'].createElement('img', {
 					className: classes.image,
 					onClick: this.handleImageClick,

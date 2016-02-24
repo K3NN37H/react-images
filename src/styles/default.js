@@ -30,7 +30,10 @@ const styles = {
 		lineHeight: 0,
 		verticalAlign: 'middle',
 	},
-
+	video: {
+		paddingTop: 40,
+		paddingBottom: GAP_BOTTOM
+	},
 	// IMAGES
 	image: {
 		boxSizing: 'border-box',
