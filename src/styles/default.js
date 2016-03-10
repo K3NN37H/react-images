@@ -2,6 +2,7 @@ const CLOSE_SIZE = 20;
 const ARROW_HEIGHT = 120;
 const GAP_BOTTOM = 100;
 const GAP_TOP = 40;
+const BOX_BORDER = 5;
 
 const styles = {
 	// SCENE
@@ -59,19 +60,20 @@ const styles = {
 		textAlign: 'center',
 	},
 	figureShadow: {
-		bottom: GAP_BOTTOM,
+		backgroundColor: 'white',
+		bottom: GAP_BOTTOM - BOX_BORDER,
 		boxShadow: '0 0 8px -2px rgba(0,0,0,.6)',
 		display: 'block',
 		height: 'auto',
-		left: 0,
+		left: -BOX_BORDER,
 		position: 'absolute',
-		right: 0,
-		top: GAP_TOP,
+		right: -BOX_BORDER,
+		top: GAP_TOP - BOX_BORDER,
 		width: 'auto',
 		zIndex: -1,
 	},
 	footer: {
-		color: 'white',
+		color: 'black',
 		lineHeight: 1.3,
 		height: GAP_BOTTOM,
 		marginTop: -GAP_BOTTOM,
@@ -89,7 +91,12 @@ const styles = {
 		opacity: .75,
 	},
 	footerCaption: {
-		paddingRight: 80,
+		backgroundColor: 'white',
+		color: '#808285',
+		margin: -BOX_BORDER,
+		border: `${BOX_BORDER}px solid white`,
+		padding: '10px 20px',
+		paddingRight: 60,
 	},
 
 	// BUTTONS
