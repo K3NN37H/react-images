@@ -29,9 +29,11 @@ var IMAGES = IMAGE_NAMES.map(function (img) {
 		src: './images/800-' + img + '.jpg',
 		thumbnail: './images/thumbnail-' + img + '.jpg',
 		srcset: ['./images/1024-' + img + '.jpg 1024w', './images/800-' + img + '.jpg 800w', './images/500-' + img + '.jpg 500w', './images/320-' + img + '.jpg 320w'],
-		download: function download() {
-			return alert('Button clicked');
-		},
+		cornerContent: _react2['default'].createElement(
+			'span',
+			null,
+			'Words'
+		),
 		caption: 'we gonna add a lot of text here so that we are blowing up the size of the caption area so that we can find the effects and test and play around with it. I am going to need a lot of text for this one since these pictures are really wide and I need it to wrap all the way for it to work'
 	};
 });

@@ -151,28 +151,17 @@ class Lightbox extends Component {
 	renderFooter (caption) {
 		const { currentImage, images, showImageCount } = this.props;
 		const { classes } = this.props.sheet;
-		const { download = null } = images[currentImage]
+		const { cornerContent = null } = images[currentImage]
 		if (!caption && !showImageCount) return;
 
 		const imageCount = showImageCount ? <div className={classes.footerCount}>{currentImage + 1} of {images.length}</div> : null;
 		const figcaption = caption ? <figcaption className={classes.footerCaption}>{caption}</figcaption> : null;
-		const controlButton = download ? (
-			<button className="btn btn-primary btn-sm"
-					onClick={download}
-					style={{ position: 'absolute'
-								 , top: '-30px'
-								 , right: '0'
-								 , marginRight: '15px'
-								 }}>
-				<span className="ion-android-download"></span>
-			</button>
-		) : null;
 
 		return (
 			<div className={classes.footer}>
 				{imageCount}
 				{figcaption}
-				{controlButton}
+				{cornerContent}
 			</div>
 		);
 	}
@@ -237,7 +226,6 @@ Lightbox.propTypes = {
 			srcset: PropTypes.array,
 			caption: PropTypes.string,
 			isVideo: PropTypes.bool,
-			download: PropTypes.func,
 			poster: PropTypes.string
 		})
 	).isRequired,
