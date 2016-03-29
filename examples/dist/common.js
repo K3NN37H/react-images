@@ -1479,8 +1479,6 @@ function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj;
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 
-var _utils = require('./utils');
-
 var _uid = require('./uid');
 
 var uid = _interopRequireWildcard(_uid);
@@ -1488,7 +1486,7 @@ var uid = _interopRequireWildcard(_uid);
 /**
  * Conditional rule for @media, @supports
  *
- * @api public
+ * @api private
  */
 
 var ConditionalRule = (function () {
@@ -1499,10 +1497,7 @@ var ConditionalRule = (function () {
     this.type = 'conditional';
     this.selector = selector;
     this.options = _extends({}, options, { parent: this });
-    this.rules = Object.create(null);
-    for (var _name in styles) {
-      this.createRule(_name, styles[_name]);
-    }
+    this.rules = this.createChildRules(styles);
   }
 
   /**
@@ -1510,43 +1505,38 @@ var ConditionalRule = (function () {
    *
    * @param {Object} styles
    * @return {Array} rules
-   * @api public
+   * @api private
    */
 
-  ConditionalRule.prototype.createRule = function createRule(name, style, options) {
-    var newOptions = this.options;
-    var _newOptions = newOptions;
-    var sheet = _newOptions.sheet;
-    var jss = _newOptions.jss;
+  ConditionalRule.prototype.createChildRules = function createChildRules(styles) {
+    var rules = Object.create(null);
+    var _options = this.options;
+    var sheet = _options.sheet;
+    var jss = _options.jss;
 
-    // We have already a rule in the current style sheet with this name,
-    // This new rule is supposed to overwrite the first one, for this we need
-    // to ensure it will have the same className/selector.
-    var existingRule = sheet && sheet.getRule(name);
-    var className = existingRule ? existingRule.className : null;
-    if (className || options) {
-      newOptions = _extends({}, newOptions, { className: className }, options);
+    for (var _name in styles) {
+      var localOptions = this.options;
+      // We have already a rule in the current style sheet with this name,
+      // This new rule is supposed to overwrite the first one, for this we need
+      // to ensure it will have the same className/selector.
+      var ruleToOverwrite = this.options.sheet && this.options.sheet.getRule(_name);
+      if (ruleToOverwrite) localOptions = _extends({}, this.options, { className: ruleToOverwrite.className });
+      rules[_name] = (sheet || jss).createRule(_name, styles[_name], localOptions);
     }
-    var rule = (sheet || jss).createRule(name, style, newOptions);
-    this.rules[name] = rule;
-    return rule;
+    return rules;
   };
 
   /**
    * Generates a CSS string.
    *
    * @return {String}
-   * @api public
+   * @api private
    */
 
   ConditionalRule.prototype.toString = function toString() {
     var str = this.selector + ' {\n';
     for (var _name2 in this.rules) {
-      var rule = this.rules[_name2];
-      if (rule.style && _utils.isEmptyObject(rule.style)) {
-        continue;
-      }
-      var ruleStr = rule.toString({ indentationLevel: 1 });
+      var ruleStr = this.rules[_name2].toString({ indentationLevel: 1 });
       str += ruleStr + '\n';
     }
     str += '}';
@@ -1558,7 +1548,7 @@ var ConditionalRule = (function () {
 
 exports['default'] = ConditionalRule;
 module.exports = exports['default'];
-},{"./uid":44,"./utils":45}],34:[function(require,module,exports){
+},{"./uid":45}],34:[function(require,module,exports){
 /**
  * DOM rendering backend for StyleSheet.
  *
@@ -1761,20 +1751,12 @@ var Jss = (function () {
   /**
    * Register plugin. Passed function will be invoked with a rule instance.
    *
-   * @param {Function} plugins
+   * @param {Function} fn
    * @api public
    */
 
-  Jss.prototype.use = function use() {
-    var _this = this;
-
-    for (var _len = arguments.length, plugins = Array(_len), _key = 0; _key < _len; _key++) {
-      plugins[_key] = arguments[_key];
-    }
-
-    plugins.forEach(function (plugin) {
-      return _this.plugins.use(plugin);
-    });
+  Jss.prototype.use = function use(fn) {
+    this.plugins.use(fn);
     return this;
   };
 
@@ -1783,7 +1765,7 @@ var Jss = (function () {
 
 exports['default'] = Jss;
 module.exports = exports['default'];
-},{"./PluginsRegistry":37,"./StyleSheet":40,"./createRule":42,"./findRenderer":43,"./uid":44}],36:[function(require,module,exports){
+},{"./PluginsRegistry":37,"./StyleSheet":40,"./createRule":43,"./findRenderer":44,"./uid":45}],36:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -1852,7 +1834,7 @@ var KeyframeRule = (function () {
 
 exports['default'] = KeyframeRule;
 module.exports = exports['default'];
-},{"./uid":44}],37:[function(require,module,exports){
+},{"./uid":45}],37:[function(require,module,exports){
 /**
  * Register a plugin, run a plugin.
  */
@@ -1903,6 +1885,8 @@ module.exports = exports["default"];
 
 exports.__esModule = true;
 
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj['default'] = obj; return newObj; } }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
@@ -1911,12 +1895,14 @@ var _uid = require('./uid');
 
 var uid = _interopRequireWildcard(_uid);
 
-var _utils = require('./utils');
+var _clone = require('./clone');
+
+var _clone2 = _interopRequireDefault(_clone);
 
 /**
  * Regular rules and font-face.
  *
- * @api public
+ * @api private
  */
 
 var Rule = (function () {
@@ -1934,7 +1920,7 @@ var Rule = (function () {
     }
     this.originalStyle = style;
     // We expect style to be plain object.
-    this.style = _utils.clone(style);
+    this.style = _clone2['default'](style);
   }
 
   /**
@@ -2018,13 +2004,9 @@ var Rule = (function () {
   /**
    * Generates a CSS string.
    *
-   * Options:
-   * - `selector` to get a rule without selector
-   * - `indentationLevel` level of indentation
-   *
    * @param {Object} options
    * @return {String}
-   * @api public
+   * @api private
    */
 
   Rule.prototype.toString = function toString() {
@@ -2061,7 +2043,7 @@ function indent(level, str) {
   }return indentStr + str;
 }
 module.exports = exports['default'];
-},{"./uid":44,"./utils":45}],39:[function(require,module,exports){
+},{"./clone":42,"./uid":45}],39:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -2077,7 +2059,7 @@ var uid = _interopRequireWildcard(_uid);
 /**
  * Rule like @charset, @import, @namespace.
  *
- * @api public
+ * @api private
  */
 
 var SimpleRule = (function () {
@@ -2095,7 +2077,7 @@ var SimpleRule = (function () {
    * Generates a CSS string.
    *
    * @return {String}
-   * @api public
+   * @api private
    */
 
   SimpleRule.prototype.toString = function toString() {
@@ -2107,7 +2089,7 @@ var SimpleRule = (function () {
 
 exports['default'] = SimpleRule;
 module.exports = exports['default'];
-},{"./uid":44}],40:[function(require,module,exports){
+},{"./uid":45}],40:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -2117,8 +2099,6 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
-
-var _utils = require('./utils');
 
 var _createRule2 = require('./createRule');
 
@@ -2266,18 +2246,8 @@ var StyleSheet = (function () {
       if (stringified[rule.id]) {
         continue;
       }
-
-      if (rule.style && _utils.isEmptyObject(rule.style)) {
-        continue;
-      }
-
-      if (rule.rules && _utils.isEmptyObject(rule.rules)) {
-        continue;
-      }
-
       if (str) str += '\n';
-
-      str += rule.toString(options);
+      str += rules[_name3].toString(options);
       stringified[rule.id] = true;
     }
     return str;
@@ -2357,7 +2327,7 @@ var StyleSheet = (function () {
 
 exports['default'] = StyleSheet;
 module.exports = exports['default'];
-},{"./createRule":42,"./findRenderer":43,"./utils":45}],41:[function(require,module,exports){
+},{"./createRule":43,"./findRenderer":44}],41:[function(require,module,exports){
 /**
  * Rendering backend to do nothing in nodejs.
  */
@@ -2392,6 +2362,29 @@ var VirtualRenderer = (function () {
 exports["default"] = VirtualRenderer;
 module.exports = exports["default"];
 },{}],42:[function(require,module,exports){
+"use strict";
+
+exports.__esModule = true;
+exports["default"] = clone;
+var stringify = JSON.stringify;
+var parse = JSON.parse;
+
+/**
+ * Deeply clone object using serialization.
+ * Expects object to be plain and without cyclic dependencies.
+ *
+ * http://jsperf.com/lodash-deepclone-vs-jquery-extend-deep/6
+ *
+ * @type {Object} obj
+ * @return {Object}
+ */
+
+function clone(obj) {
+  return parse(stringify(obj));
+}
+
+module.exports = exports["default"];
+},{}],43:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -2465,7 +2458,7 @@ function createRule(selector) {
 }
 
 module.exports = exports['default'];
-},{"./ConditionalRule":33,"./KeyframeRule":36,"./Rule":38,"./SimpleRule":39}],43:[function(require,module,exports){
+},{"./ConditionalRule":33,"./KeyframeRule":36,"./Rule":38,"./SimpleRule":39}],44:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -2499,7 +2492,7 @@ function findRenderer() {
 }
 
 module.exports = exports['default'];
-},{"./DomRenderer":34,"./VirtualRenderer":41}],44:[function(require,module,exports){
+},{"./DomRenderer":34,"./VirtualRenderer":41}],45:[function(require,module,exports){
 (function (global){
 'use strict';
 
@@ -2536,41 +2529,6 @@ function reset() {
   ruleCounter = 0;
 }
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{}],45:[function(require,module,exports){
-"use strict";
-
-exports.__esModule = true;
-exports.clone = clone;
-exports.isEmptyObject = isEmptyObject;
-var stringify = JSON.stringify;
-var parse = JSON.parse;
-
-/**
- * Deeply clone object using serialization.
- * Expects object to be plain and without cyclic dependencies.
- *
- * http://jsperf.com/lodash-deepclone-vs-jquery-extend-deep/6
- *
- * @type {Object} obj
- * @return {Object}
- */
-
-function clone(obj) {
-  return parse(stringify(obj));
-}
-
-/*
- * Determine whether an object is empty or not.
- * More performant than a `Object.keys(obj).length > 0`
- */
-
-function isEmptyObject(obj) {
-  for (var key in obj) {
-    return false;
-  } // eslint-disable-line no-unused-vars
-
-  return true;
-}
 },{}],46:[function(require,module,exports){
 // shim for using process in browser
 
@@ -10373,10 +10331,7 @@ var ReactDOMOption = {
       }
     });
 
-    if (content) {
-      nativeProps.children = content;
-    }
-
+    nativeProps.children = content;
     return nativeProps;
   }
 
@@ -16811,7 +16766,7 @@ module.exports = ReactUpdates;
 
 'use strict';
 
-module.exports = '0.14.7';
+module.exports = '0.14.6';
 },{}],133:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -17903,7 +17858,6 @@ var warning = require('fbjs/lib/warning');
  */
 var EventInterface = {
   type: null,
-  target: null,
   // currentTarget is set when dispatching; no use in copying it here
   currentTarget: emptyFunction.thatReturnsNull,
   eventPhase: null,
@@ -17937,6 +17891,8 @@ function SyntheticEvent(dispatchConfig, dispatchMarker, nativeEvent, nativeEvent
   this.dispatchConfig = dispatchConfig;
   this.dispatchMarker = dispatchMarker;
   this.nativeEvent = nativeEvent;
+  this.target = nativeEventTarget;
+  this.currentTarget = nativeEventTarget;
 
   var Interface = this.constructor.Interface;
   for (var propName in Interface) {
@@ -17947,11 +17903,7 @@ function SyntheticEvent(dispatchConfig, dispatchMarker, nativeEvent, nativeEvent
     if (normalize) {
       this[propName] = normalize(nativeEvent);
     } else {
-      if (propName === 'target') {
-        this.target = nativeEventTarget;
-      } else {
-        this[propName] = nativeEvent[propName];
-      }
+      this[propName] = nativeEvent[propName];
     }
   }
 
@@ -20561,7 +20513,7 @@ exports.__esModule = true;
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
 exports['default'] = jssNested;
-var regExp = /&/g;
+var regExp = /&/gi;
 
 /**
  * Convert nested rules to separate, remove them from original styles.
@@ -20576,20 +20528,15 @@ function jssNested() {
     var _rule$options = rule.options;
     var sheet = _rule$options.sheet;
     var jss = _rule$options.jss;
-    var parent = _rule$options.parent;
 
     var container = sheet || jss;
-    var options = undefined;
-
-    if (parent && parent.type === 'conditional') {
-      container = parent;
-    }
+    var options = rule.options;
 
     for (var prop in rule.style) {
       if (prop[0] === '&') {
-        if (!options) options = _extends({}, rule.options, { named: false });
-        var _name = prop.replace(regExp, rule.selector);
-        container.createRule(_name, rule.style[prop], options);
+        if (options.named) options = _extends({}, options, { named: false });
+        var selector = prop.replace(regExp, rule.selector);
+        container.createRule(selector, rule.style[prop], options);
         delete rule.style[prop];
       }
     }
