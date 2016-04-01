@@ -180,26 +180,28 @@ class Lightbox extends Component {
 
 		return (
 			<figure key={'image' + currentImage} className={classes.figure} style={{ maxWidth: this.props.width }}>
-				{images[currentImage].isVideo ? (
-					<video src={images[currentImage].src} controls="controls"
-						poster={images[currentImage].poster}
-						className={classes.video}
-						style={{maxHeight: windowHeight,
-						maxWidth: this.props.width}}></video>
-				) :
-				<img
-					className={classes.image}
-					onClick={this.handleImageClick}
-					onTouchEnd={this.handleImageClick}
-					sizes={sizes}
-					src={images[currentImage].src}
-					srcSet={srcset}
-					style={{
-						cursor: this.props.onClickShowNextImage ? 'pointer' : 'auto',
-						maxHeight: windowHeight
-					}}
-				/>
-				}
+				<div id="mediaBoxContainer" className="mediaBoxContainer">
+					{images[currentImage].isVideo ? (
+						<video src={images[currentImage].src} controls="controls"
+							poster={images[currentImage].poster}
+							className={classes.video}
+							style={{maxHeight: windowHeight,
+							maxWidth: this.props.width}}></video>
+					) :
+					<img
+						className={classes.image}
+						onClick={this.handleImageClick}
+						onTouchEnd={this.handleImageClick}
+						sizes={sizes}
+						src={images[currentImage].src}
+						srcSet={srcset}
+						style={{
+							cursor: this.props.onClickShowNextImage ? 'pointer' : 'auto',
+							maxHeight: windowHeight
+						}}
+					/>
+					}
+				</div>
 				{this.renderFooter(images[currentImage].caption)}
 			</figure>
 		);

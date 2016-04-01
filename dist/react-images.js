@@ -448,22 +448,26 @@ var Lightbox = (function (_Component) {
 			return _react2['default'].createElement(
 				'figure',
 				{ key: 'image' + currentImage, className: classes.figure, style: { maxWidth: this.props.width } },
-				images[currentImage].isVideo ? _react2['default'].createElement('video', { src: images[currentImage].src, controls: 'controls',
-					poster: images[currentImage].poster,
-					className: classes.video,
-					style: { maxHeight: windowHeight,
-						maxWidth: this.props.width } }) : _react2['default'].createElement('img', {
-					className: classes.image,
-					onClick: this.handleImageClick,
-					onTouchEnd: this.handleImageClick,
-					sizes: sizes,
-					src: images[currentImage].src,
-					srcSet: srcset,
-					style: {
-						cursor: this.props.onClickShowNextImage ? 'pointer' : 'auto',
-						maxHeight: windowHeight
-					}
-				}),
+				_react2['default'].createElement(
+					'div',
+					{ id: 'mediaBoxContainer', className: 'mediaBoxContainer' },
+					images[currentImage].isVideo ? _react2['default'].createElement('video', { src: images[currentImage].src, controls: 'controls',
+						poster: images[currentImage].poster,
+						className: classes.video,
+						style: { maxHeight: windowHeight,
+							maxWidth: this.props.width } }) : _react2['default'].createElement('img', {
+						className: classes.image,
+						onClick: this.handleImageClick,
+						onTouchEnd: this.handleImageClick,
+						sizes: sizes,
+						src: images[currentImage].src,
+						srcSet: srcset,
+						style: {
+							cursor: this.props.onClickShowNextImage ? 'pointer' : 'auto',
+							maxHeight: windowHeight
+						}
+					})
+				),
 				this.renderFooter(images[currentImage].caption)
 			);
 		}
