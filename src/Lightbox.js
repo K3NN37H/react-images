@@ -168,7 +168,7 @@ class Lightbox extends Component {
 	renderImages () {
 		const { images, currentImage } = this.props;
 		const { classes } = this.props.sheet;
-		const { windowHeight } = this.state;
+		const { windowHeight } = this.state || { windowHeight: window ? window.innerHeight : 0 };
 
 		if (!images || !images.length) return;
 
