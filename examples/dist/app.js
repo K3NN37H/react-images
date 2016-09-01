@@ -34,7 +34,7 @@ var DEFAULT_IMAGES = [{ id: '1470619549108-b85c56fe5be8', caption: 'Photo by Ala
 { id: '1471079502516-250c19af6928', caption: 'Photo by Jeremy Bishop', orientation: 'landscape', useForDemo: true }, // https://unsplash.com/photos/GIpGxe2_cT4 (Turtle)
 { id: '1454023492550-5696f8ff10e1', caption: 'Photo by Jessica Weiller', orientation: 'landscape', useForDemo: true }, // https://unsplash.com/photos/LmVSKeDy6EA (Tiger)
 { id: '1470854989922-5be2f7456d78', caption: 'Photo by Piotr Łaskawski', orientation: 'landscape', useForDemo: true }, // https://unsplash.com/photos/GXMr7BadXQo (Hedgehog)
-{ id: '1470317596697-cbdeda56f999', caption: 'Photo by Michel Bosma Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi ut commodo elit. Phasellus posuere sapien non porttitor varius. Nulla interdum, libero eu accumsan feugiat, justo mi scelerisque quam, a placerat justo erat id turpis. Integer at arcu sed risus feugiat laoreet. Praesent urna arcu, faucibus non congue eget, blandit quis felis. Etiam tortor sem, scelerisque id ex vitae, eleifend dapibus tortor. Nunc quis libero vitae ante euismod placerat quis vehicula arcu. Morbi dictum efficitur tortor eu iaculis. Nullam ante metus, dignissim sed molestie et, ultrices sit amet dolor. Sed nulla arcu, egestas non vestibulum sed, commodo in arcu. Vestibulum pretium augue non ex blandit, quis eleifend dui dignissim. Nullam eu est neque.', orientation: 'landscape', useForDemo: true }];
+{ id: '1470317596697-cbdeda56f999', caption: 'Photo by Michel Bosma Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi ut commodo elit. Phasellus posuere sapien non porttitor varius. Nulla interdum, libero eu accumsan feugiat, justo mi scelerisque quam, a placerat justo erat id turpis. Integer at arcu sed risus feugiat laoreet. Praesent urna arcu, faucibus non congue eget, blandit quis felis. Etiam tortor sem, scelerisque id ex vitae, eleifend dapibus tortor. Nunc quis libero vitae ante euismod placerat quis vehicula arcu. Morbi dictum efficitur tortor eu iaculis. Nullam ante metus, dignissim sed molestie et, ultrices sit amet dolor. Sed nulla arcu, egestas non vestibulum sed, commodo in arcu. Vestibulum pretium augue non ex blandit, quis eleifend dui dignissim. Nullam eu est neque. Photo by Michel Bosma Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi ut commodo elit. Phasellus posuere sapien non porttitor varius. Nulla interdum, libero eu accumsan feugiat, justo mi scelerisque quam, a placerat justo erat id turpis. Integer at arcu sed risus feugiat laoreet. Praesent urna arcu, faucibus non congue eget, blandit quis felis. Etiam tortor sem, scelerisque id ex vitae, eleifend dapibus tortor. Nunc quis libero vitae ante euismod placerat quis vehicula arcu. Morbi dictum efficitur tortor eu iaculis. Nullam ante metus, dignissim sed molestie et, ultrices sit amet dolor. Sed nulla arcu, egestas non vestibulum sed, commodo in arcu. Vestibulum pretium augue non ex blandit, quis eleifend dui dignissim. Nullam eu est neque.', orientation: 'landscape', useForDemo: true }];
 // https://unsplash.com/photos/XgF9e93Tkt0 (Ladybug)
 var THEMED_IMAGES = [{ id: '1471101173712-b9884175254e', caption: 'Photo by Pedro Lastra', orientation: 'square', useForDemo: true }, // https://unsplash.com/photos/5oRzZU5uwSM (Dragonfly)
 { id: '1471127432458-65206be149c9', caption: 'Photo by Ernesto Velázquez', orientation: 'landscape', useForDemo: true }, // https://unsplash.com/photos/Kpgt4pl03O0 (Deer)
@@ -333,12 +333,15 @@ var Gallery = (function (_Component) {
 		key: 'render',
 		value: function render() {
 			var img = this.props.images;
-			img.push({ src: "https://ia801001.us.archive.org/30/items/ChineseLanternCCBYNatureClip/Chinese%20lantern%20CC-BY%20NatureClip.mp4", isVideo: true });
+			var themess = {};
+			// const themess = { figure: { padding: '5px', backgroundColor: 'white' }, header: { height: 150}, footer: {height:150} };
 			var cb = [_react2['default'].createElement(
 				'button',
-				{ style: { position: "absolute", bottom: "0" } },
+				{ style: { zIndex: 20, position: "absolute", top: -50, right: "0" } },
 				'Click'
 			)];
+			img.push({ src: "https://ia801001.us.archive.org/30/items/ChineseLanternCCBYNatureClip/Chinese%20lantern%20CC-BY%20NatureClip.mp4", isVideo: true, cornerContent: cb });
+
 			return _react2['default'].createElement(
 				'div',
 				{ className: 'section' },
@@ -364,7 +367,7 @@ var Gallery = (function (_Component) {
 					onClickThumbnail: this.gotoImage,
 					onClose: this.closeLightbox,
 					showThumbnails: this.props.showThumbnails,
-					theme: this.props.theme
+					theme: themess
 				})
 			);
 		}

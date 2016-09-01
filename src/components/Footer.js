@@ -9,6 +9,7 @@ function Footer ({
 	countSeparator,
 	countTotal,
 	showCount,
+	cornerContent,
 	...props,
 }, {
 	theme,
@@ -27,6 +28,7 @@ function Footer ({
 
 	return (
 		<div className={css(classes.footer)} {...props}>
+			{ cornerContent ? cornerContent : null }
 			{caption ? (
 				<figcaption className={css(classes.footerCaption)}>
 					{caption}
@@ -57,6 +59,7 @@ const defaultStyles = {
 		justifyContent: 'space-between',
 		left: 0,
 		lineHeight: 1.3,
+		position: 'relative',
 		paddingBottom: defaults.footer.gutter.vertical,
 		paddingLeft: defaults.footer.gutter.horizontal,
 		paddingRight: defaults.footer.gutter.horizontal,

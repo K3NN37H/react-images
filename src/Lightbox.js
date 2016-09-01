@@ -10,11 +10,12 @@ import Header from './components/Header';
 import PaginatedThumbnails from './components/PaginatedThumbnails';
 import Portal from './components/Portal';
 import ScrollLock from './components/ScrollLock';
+import { deepMerge } from './utils'
 
 import { bindFunctions, canUseDom } from './utils';
 
 class Lightbox extends Component {
-	constructor () {
+	constructor (props) {
 		super();
 
 		bindFunctions.call(this, [
@@ -22,6 +23,14 @@ class Lightbox extends Component {
 			'gotoPrev',
 			'handleKeyboardInput',
 		]);
+
+		if (!props.theme) return;
+		if (props.theme.figure) {
+			const merge = deepMerge(defaultStyles, props.theme);
+			classes.figure = StyleSheet.create(merge).figure;
+		} else {
+			classes.figure = StyleSheet.create(defaultStyles).figure
+		}
 	}
 	getChildContext () {
 		return {
@@ -142,7 +151,7 @@ class Lightbox extends Component {
 				direction="right"
 				icon="arrowRight"
 				onClick={this.gotoNext}
-				title="Previous (Right arrow key)"
+				title="Next (Right arrow key)"
 				type="button"
 			/>
 		);
@@ -223,7 +232,8 @@ class Lightbox extends Component {
 						<video src={image.src}
 							controls="controls"
 							poster={image.poster}
-							className={css(classes.video)}></video>
+							className={css(classes.video)}
+							style={{maxHeight: `calc(100vh - ${heightOffset})`}}></video>
 					) :
 					<img
 						className={css(classes.image)}
@@ -244,6 +254,7 @@ class Lightbox extends Component {
 					countSeparator={imageCountSeparator}
 					countTotal={images.length}
 					showCount={showImageCount}
+					cornerContent={images[currentImage].cornerContent}
 				/>
 			</figure>
 		);
@@ -319,9 +330,6 @@ const classes = StyleSheet.create({
 	content: {
 		position: 'relative',
 	},
-	figure: {
-		margin: 0, // remove browser default
-	},
 	image: {
 		display: 'block', // removes browser default gutter
 		height: 'auto',
@@ -343,5 +351,11 @@ const classes = StyleSheet.create({
 		userSelect: 'none',
 	}
 });
+
+const defaultStyles = {
+	figure: {
+		margin: 0, // remove browser default
+	}
+}
 
 export default Lightbox;

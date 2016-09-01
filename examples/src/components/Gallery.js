@@ -77,10 +77,13 @@ class Gallery extends Component {
 	}
 	render () {
 		let img = this.props.images;
-		img.push({ src: "https://ia801001.us.archive.org/30/items/ChineseLanternCCBYNatureClip/Chinese%20lantern%20CC-BY%20NatureClip.mp4", isVideo: true });
+		const themess = {}
+		// const themess = { figure: { padding: '5px', backgroundColor: 'white' }, header: { height: 150}, footer: {height:150} };
 		const cb = [
-			<button style={{position:"absolute",bottom:"0"}}>Click</button>
+			<button style={{zIndex:20,position:"absolute",top:-50,right:"0"}}>Click</button>
 			];
+		img.push({ src: "https://ia801001.us.archive.org/30/items/ChineseLanternCCBYNatureClip/Chinese%20lantern%20CC-BY%20NatureClip.mp4", isVideo: true, cornerContent: cb });
+		
 		return (
 			<div className="section">
 				{this.props.heading && <h2>{this.props.heading}</h2>}
@@ -97,7 +100,7 @@ class Gallery extends Component {
 					onClickThumbnail={this.gotoImage}
 					onClose={this.closeLightbox}
 					showThumbnails={this.props.showThumbnails}
-					theme={this.props.theme}
+					theme={themess}
 				/>
 			</div>
 		);

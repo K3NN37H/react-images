@@ -1753,8 +1753,9 @@ function Footer(_ref, _ref2) {
 	var countSeparator = _ref.countSeparator;
 	var countTotal = _ref.countTotal;
 	var showCount = _ref.showCount;
+	var cornerContent = _ref.cornerContent;
 
-	var props = _objectWithoutProperties(_ref, ['caption', 'countCurrent', 'countSeparator', 'countTotal', 'showCount']);
+	var props = _objectWithoutProperties(_ref, ['caption', 'countCurrent', 'countSeparator', 'countTotal', 'showCount', 'cornerContent']);
 
 	var theme = _ref2.theme;
 
@@ -1773,6 +1774,7 @@ function Footer(_ref, _ref2) {
 	return _react2['default'].createElement(
 		'div',
 		_extends({ className: (0, _aphroditeNoImportant.css)(classes.footer) }, props),
+		cornerContent ? cornerContent : null,
 		caption ? _react2['default'].createElement(
 			'figcaption',
 			{ className: (0, _aphroditeNoImportant.css)(classes.footerCaption) },
@@ -1802,6 +1804,7 @@ var defaultStyles = {
 		justifyContent: 'space-between',
 		left: 0,
 		lineHeight: 1.3,
+		position: 'relative',
 		paddingBottom: _theme2['default'].footer.gutter.vertical,
 		paddingLeft: _theme2['default'].footer.gutter.horizontal,
 		paddingRight: _theme2['default'].footer.gutter.horizontal,
@@ -2127,7 +2130,7 @@ var PaginatedThumbnails = (function (_Component) {
 				icon: 'arrowRight',
 				onClick: this.gotoNext,
 				style: arrowStyles,
-				title: 'Previous (Right arrow key)',
+				title: 'Next (Right arrow key)',
 				type: 'button'
 			});
 		}
@@ -2745,12 +2748,20 @@ var _utils = require('./utils');
 var Lightbox = (function (_Component) {
 	_inherits(Lightbox, _Component);
 
-	function Lightbox() {
+	function Lightbox(props) {
 		_classCallCheck(this, Lightbox);
 
 		_get(Object.getPrototypeOf(Lightbox.prototype), 'constructor', this).call(this);
 
 		_utils.bindFunctions.call(this, ['gotoNext', 'gotoPrev', 'handleKeyboardInput']);
+
+		if (!props.theme) return;
+		if (props.theme.figure) {
+			var merge = (0, _utils.deepMerge)(defaultStyles, props.theme);
+			classes.figure = _aphroditeNoImportant.StyleSheet.create(merge).figure;
+		} else {
+			classes.figure = _aphroditeNoImportant.StyleSheet.create(defaultStyles).figure;
+		}
 	}
 
 	_createClass(Lightbox, [{
@@ -2884,7 +2895,7 @@ var Lightbox = (function (_Component) {
 				direction: 'right',
 				icon: 'arrowRight',
 				onClick: this.gotoNext,
-				title: 'Previous (Right arrow key)',
+				title: 'Next (Right arrow key)',
 				type: 'button'
 			});
 		}
@@ -2965,7 +2976,8 @@ var Lightbox = (function (_Component) {
 					image.isVideo ? _react2['default'].createElement('video', { src: image.src,
 						controls: 'controls',
 						poster: image.poster,
-						className: (0, _aphroditeNoImportant.css)(classes.video) }) : _react2['default'].createElement('img', {
+						className: (0, _aphroditeNoImportant.css)(classes.video),
+						style: { maxHeight: 'calc(100vh - ' + heightOffset + ')' } }) : _react2['default'].createElement('img', {
 						className: (0, _aphroditeNoImportant.css)(classes.image),
 						onClick: !!onClickImage && onClickImage,
 						sizes: sizes,
@@ -2982,7 +2994,8 @@ var Lightbox = (function (_Component) {
 					countCurrent: currentImage + 1,
 					countSeparator: imageCountSeparator,
 					countTotal: images.length,
-					showCount: showImageCount
+					showCount: showImageCount,
+					cornerContent: images[currentImage].cornerContent
 				})
 			);
 		}
@@ -3065,9 +3078,6 @@ var classes = _aphroditeNoImportant.StyleSheet.create({
 	content: {
 		position: 'relative'
 	},
-	figure: {
-		margin: 0 },
-	// remove browser default
 	image: {
 		display: 'block', // removes browser default gutter
 		height: 'auto',
@@ -3090,6 +3100,12 @@ var classes = _aphroditeNoImportant.StyleSheet.create({
 	}
 });
 
+var defaultStyles = {
+	figure: {
+		margin: 0 }
+};
+
+// remove browser default
 exports['default'] = Lightbox;
 module.exports = exports['default'];
 /*
