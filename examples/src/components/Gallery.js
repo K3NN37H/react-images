@@ -76,14 +76,20 @@ class Gallery extends Component {
 		);
 	}
 	render () {
+		let img = this.props.images;
+		img.push({ src: "https://ia801001.us.archive.org/30/items/ChineseLanternCCBYNatureClip/Chinese%20lantern%20CC-BY%20NatureClip.mp4", isVideo: true });
+		const cb = [
+			<button style={{position:"absolute",bottom:"0"}}>Click</button>
+			];
 		return (
 			<div className="section">
 				{this.props.heading && <h2>{this.props.heading}</h2>}
 				{this.props.subheading && <p>{this.props.subheading}</p>}
 				{this.renderGallery()}
 				<Lightbox
+					customControls={cb}
 					currentImage={this.state.currentImage}
-					images={this.props.images}
+					images={img}
 					isOpen={this.state.lightboxIsOpen}
 					onClickImage={this.handleClickImage}
 					onClickNext={this.gotoNext}

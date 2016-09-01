@@ -218,17 +218,26 @@ class Lightbox extends Component {
 					https://fb.me/react-unknown-prop is resolved
 					<Swipeable onSwipedLeft={this.gotoNext} onSwipedRight={this.gotoPrev} />
 				*/}
-				<img
-					className={css(classes.image)}
-					onClick={!!onClickImage && onClickImage}
-					sizes={sizes}
-					src={image.src}
-					srcSet={srcset}
-					style={{
-						cursor: this.props.onClickImage ? 'pointer' : 'auto',
-						maxHeight: `calc(100vh - ${heightOffset})`,
-					}}
-				/>
+				<div id="mediaBoxContainer" className="mediaBoxContainer">
+					{ image.isVideo ? (
+						<video src={image.src}
+							controls="controls"
+							poster={image.poster}
+							className={css(classes.video)}></video>
+					) :
+					<img
+						className={css(classes.image)}
+						onClick={!!onClickImage && onClickImage}
+						sizes={sizes}
+						src={image.src}
+						srcSet={srcset}
+						style={{
+							cursor: this.props.onClickImage ? 'pointer' : 'auto',
+							maxHeight: `calc(100vh - ${heightOffset})`,
+						}}
+					/>
+					}
+				</div>
 				<Footer
 					caption={images[currentImage].caption}
 					countCurrent={currentImage + 1}
@@ -323,6 +332,16 @@ const classes = StyleSheet.create({
 		WebkitTouchCallout: 'none',
 		userSelect: 'none',
 	},
+	video: {
+		display: 'block', // removes browser default gutter
+		height: 'auto',
+		margin: '0 auto', // maintain center on very short screens OR very narrow image
+		maxWidth: '100%',
+
+		// disable user select
+		WebkitTouchCallout: 'none',
+		userSelect: 'none',
+	}
 });
 
 export default Lightbox;
